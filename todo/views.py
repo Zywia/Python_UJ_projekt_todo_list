@@ -19,6 +19,7 @@ class TaskViewSet(mixins.CreateModelMixin,
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
+
     @action(detail=True, methods=['put'])
     def set_done(self, request, pk):
         task = self.get_object()

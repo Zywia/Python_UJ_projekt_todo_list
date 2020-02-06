@@ -18,8 +18,8 @@ class GroupOfTasks(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     description = models.CharField(max_length=1000, default='')
     owner = models.ForeignKey('auth.User', on_delete=models.CASCADE)
-    folder = models.ForeignKey('Folder', related_name='groups',
-                               on_delete=models.CASCADE)
+    folder = models.ForeignKey('Folder', related_name='groups', blank=True,
+                               null=True, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['title']
@@ -38,7 +38,8 @@ class Task(models.Model):
 
     title = models.CharField(max_length=100, blank=True, default='')
     description = models.CharField(max_length=1000, blank=True, default='')
-    groupOfTasks = models.ForeignKey('GroupOfTasks', related_name='tasks', on_delete=models.CASCADE)
+    groupOfTasks = models.ForeignKey('GroupOfTasks', related_name='tasks', on_delete=models.CASCADE,
+                                     blank=True, null=True)
     task_priority = models.IntegerField(choices=PriorityLevels.choices(), default=PriorityLevels.Normal)
     doneDateTime = models.DateTimeField(blank=True, null=True)
     plannedDate = models.DateField(blank=True, null=True)
