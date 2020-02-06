@@ -20,22 +20,28 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
+        read_only_fields = ['doneDateTime', 'done', 'created']
 
 
 class FolderSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    groupOfTasks = serializers.HyperlinkedRelatedField(many=True, view_name='groupOfTasks-detail', read_only=True)
+    groups = serializers.HyperlinkedRelatedField(many=True, view_name='groupoftasks-detail',
+                                                 read_only=True)
 
     class Meta:
         model = Folder
         fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
-    # tasks = serializers.HyperlinkedRelatedField(many=True, view_name='task-detail', read_only=True)
-    groups = serializers.HyperlinkedRelatedField(many=True, view_name='groupOfTasks-detail', read_only=True)
-    # folders = serializers.HyperlinkedRelatedField(many=True, view_name='folder-detail', read_only=True)
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    task_set = serializers.HyperlinkedRelatedField(many=True, view_name='task-detail',
+                                                   read_only=True)
+    groupoftasks_set = serializers.HyperlinkedRelatedField(many=True,
+                                                           view_name='groupoftasks-detail',
+                                                           read_only=True)
+    folder_set = serializers.HyperlinkedRelatedField(many=True, view_name='folder-detail',
+                                                     read_only=True)
 
     class Meta:
         model = User
-        fields =  [ 'groups']
+        fields = '__all__'
