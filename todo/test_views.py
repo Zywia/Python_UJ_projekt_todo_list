@@ -15,7 +15,7 @@ class AbstractTestClass(APITestCase):
         self.client.force_authenticate(self.user)
         factory = APIRequestFactory()
         request = factory.get('/')
-        self.objectString = model_name
+        self.object_string = model_name
         self.serializer_context = {
             'request': Request(request),
         }
@@ -59,16 +59,17 @@ class TestGroupOfTasksViewSet(AbstractTestClass):
         self.studies = GroupOfTasks.objects.create(title='studies', owner=self.user)
 
     def test_get_all_groupOfTasks(self):
-        response = self.client.get(reverse(self.objectString + '-list'))
+        response = self.client.get(reverse(self.object_string + '-list'))
         group_of_tasks = GroupOfTasks.objects.all()
-        serializer = GroupOfTasksSerializer(group_of_tasks, many=True, context=self.serializer_context)
+        serializer = GroupOfTasksSerializer(group_of_tasks, many=True,
+                                            context=self.serializer_context)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, serializer.data)
 
     def test_get_single_groupOfTask(self):
         response = self.client.get(
-            reverse(self.objectString + '-detail', kwargs={'pk': self.shop.pk}))
+            reverse(self.object_string + '-detail', kwargs={'pk': self.shop.pk}))
         group_of_task = GroupOfTasks.objects.get(pk=self.shop.pk)
         serializer = GroupOfTasksSerializer(group_of_task, context=self.serializer_context)
         self.assertEqual(response.data, serializer.data)
@@ -76,7 +77,7 @@ class TestGroupOfTasksViewSet(AbstractTestClass):
 
     def test_get_invalid_single_groupOfTask(self):
         response = self.client.get(
-            reverse(self.objectString + '-detail', kwargs={'pk': 109000}))
+            reverse(self.object_string + '-detail', kwargs={'pk': 109000}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
@@ -89,7 +90,7 @@ class TestTaskViewSet(AbstractTestClass):
         self.studies = Task.objects.create(title='studies', owner=self.user)
 
     def test_get_all_groupOfTasks(self):
-        response = self.client.get(reverse(self.objectString + '-list'))
+        response = self.client.get(reverse(self.object_string + '-list'))
         tasks = Task.objects.all()
         serializer = TaskSerializer(tasks, many=True, context=self.serializer_context)
 
@@ -98,7 +99,7 @@ class TestTaskViewSet(AbstractTestClass):
 
     def test_get_single_groupOfTask(self):
         response = self.client.get(
-            reverse(self.objectString + '-detail', kwargs={'pk': self.shop.pk}))
+            reverse(self.object_string + '-detail', kwargs={'pk': self.shop.pk}))
         tasks = Task.objects.get(pk=self.shop.pk)
         serializer = TaskSerializer(tasks, context=self.serializer_context)
         self.assertEqual(response.data, serializer.data)
@@ -106,7 +107,5 @@ class TestTaskViewSet(AbstractTestClass):
 
     def test_get_invalid_single_groupOfTask(self):
         response = self.client.get(
-            reverse(self.objectString + '-detail', kwargs={'pk': 109000}))
+            reverse(self.object_string + '-detail', kwargs={'pk': 109000}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-

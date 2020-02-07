@@ -3,8 +3,6 @@ from enum import IntEnum
 from django.db import models
 
 
-# Create your models here.
-
 class Folder(models.Model):
     title = models.CharField(max_length=100, blank=True, default='')
     description = models.CharField(max_length=1000, blank=True, default='')
@@ -40,7 +38,8 @@ class Task(models.Model):
     description = models.CharField(max_length=1000, blank=True, default='')
     groupOfTasks = models.ForeignKey('GroupOfTasks', related_name='tasks', on_delete=models.CASCADE,
                                      blank=True, null=True)
-    task_priority = models.IntegerField(choices=PriorityLevels.choices(), default=PriorityLevels.Normal)
+    task_priority = models.IntegerField(choices=PriorityLevels.choices(),
+                                        default=PriorityLevels.Normal)
     doneDateTime = models.DateTimeField(blank=True, null=True)
     plannedDate = models.DateField(blank=True, null=True)
     done = models.BooleanField(default=False)
